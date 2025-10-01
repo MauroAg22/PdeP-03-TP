@@ -72,10 +72,11 @@ function main(): void {
                         salirDelCase = true;
                     } else {
                         console.log("ID de tarea no válido. Intente nuevamente.");
+                        salirDelCase = true; // Se debe quitar cuando se implemente la entrada del usuario
                     }
                 } while (!salirDelCase);
-                salirDelMenu = true;
-                console.clear();
+                salirDelMenu = true; // Se debe quitar cuando se implemente la entrada del usuario y el menú vuelva a mostrarse
+                // console.clear();
                 break;
             case 5:
                 // Listar tareas
