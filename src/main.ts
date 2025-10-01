@@ -1,5 +1,7 @@
 import { PRIORIDAD, ESTADO } from "./lib/constantes";
 import { Tarea } from "./class/Tarea";
+import { fechaToString } from "./lib/funciones";
+
 
 let tareas: Tarea[] = [];
 
@@ -11,7 +13,7 @@ function main(): void {
         "Comprar frutas y verduras para la semana",
         PRIORIDAD[1],
         ESTADO[0],
-        new Date("2024-10-01")
+        new Date(fechaToString("2025", "11", "15") + "T03:00:00Z") // UTC-3
     );
 
     let tarea2 = new Tarea(
@@ -19,7 +21,7 @@ function main(): void {
         "Crear diapositivas para la reunión del lunes",
         PRIORIDAD[0],
         ESTADO[1],
-        new Date("2024-09-30")
+        new Date(fechaToString("2024", "10", "30") + "T03:00:00Z") // UTC-3
     );
 
     let tarea3 = new Tarea(
@@ -27,12 +29,14 @@ function main(): void {
         "Ir al gimnasio por la tarde",
         PRIORIDAD[2],
         ESTADO[0],
-        new Date("2024-10-02")
+        new Date(fechaToString("2024", "06", "20") + "T03:00:00Z") // UTC-3
     );
 
     tareas[tareas.length] = tarea1;
     tareas[tareas.length] = tarea2;
     tareas[tareas.length] = tarea3;
+    
+    console.clear();
 
     console.log('--------------------------------------------------------------------');
     console.log('                         Lista de Tareas');
@@ -46,6 +50,8 @@ function main(): void {
         console.log(`Fecha de Vencimiento: ${tarea.getFechaVencimiento().toLocaleDateString()}`);
         console.log('\n--------------------------------------------------------------------');
     }
+
 }
+
 
 main();

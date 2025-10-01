@@ -15,6 +15,7 @@ export class Tarea {
         this.estado = estado;
         this.fechaCreacion = new Date();
         this.fechaVencimiento = fechaVencimiento;
+
     }
 
 
