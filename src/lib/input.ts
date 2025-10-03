@@ -1,4 +1,4 @@
-import readline from 'readline';
+import * as readline from 'readline';
 
 const rl = readline.createInterface({
     input: process.stdin,
@@ -16,3 +16,9 @@ export function input(question: string): Promise<string> {
 export function close(): void {
     rl.close();
 }
+
+// Exportamos solo utilidades, NO el main
+module.exports = {
+    input,
+    close
+};

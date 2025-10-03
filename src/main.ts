@@ -2,6 +2,7 @@ import { PRIORIDAD, ESTADO } from "./lib/constantes";
 import { Tarea } from "./class/Tarea";
 import { ToDoList } from "./class/ToDoList";
 import { fechaToString } from "./lib/funciones";
+import { input, close } from "./lib/input";
 
 
 let tareas: Tarea[] = [];
@@ -43,7 +44,7 @@ function menuModificar(): void {
 }
 
 // Punto de entrada imperativo
-function main(): void {
+async function main(): Promise<void> {
 
     let tarea1 = new Tarea(
         "Comprar alimentos",
@@ -94,13 +95,13 @@ function main(): void {
     do {
         console.clear();
         menuPrincipal();
-        opcionMenu = 1; // Aquí se debería obtener la opción del usuario, por ahora está fijo
 
-        console.log(`> ${opcionMenu}`); // Simula la entrada del usuario, se debe quitar cuando se implemente la entrada real
+        opcionMenu = parseInt(await input('> '), 10);
 
         switch (opcionMenu) {
             case 1:
                 // Mostrar tareas
+                console.clear();
                 let opcionTareasAVer: number;
                 let arregloTareasFiltradas: Tarea[] = [];
 
@@ -108,6 +109,7 @@ function main(): void {
 
                 do {
                     tareasAVer();
+                    opcionMenu = parseInt(await input('> '), 10);
                     opcionTareasAVer = 1; // Aquí se debería obtener la opción del usuario, por ahora está fijo.
 
                     if (opcionTareasAVer >= 1 && opcionTareasAVer <= 5) {
@@ -128,7 +130,7 @@ function main(): void {
                             console.log(idDisponibleParaBorrar);
 
                             console.log('Ingrese el ID de la tarea que desea ver en detalle.\n\n> ');
-                            idTareaAVer = 2; // Aquí se debería obtener el ID del usuario, por ahora está fijo
+                            idTareaAVer = 1; // Aquí se debería obtener el ID del usuario, por ahora está fijo
 
                             let sePuedeVerLaTarea: boolean = false;
 
@@ -206,6 +208,7 @@ function main(): void {
 
     } while (!salirDelMenu);
 
+    close();
 }
 
 main();
