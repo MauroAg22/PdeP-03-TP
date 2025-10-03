@@ -1,12 +1,10 @@
-import { prioridad, estado } from "./types";
-
-const PRIORIDAD: prioridad[] = [
+const PRIORIDAD: string[] = [
     "+--",
     "++-",
     "+++"
 ];
 
-const ESTADO: estado[] = [
+const ESTADO: string[] = [
     "pendiente",
     "en progreso",
     "completada",

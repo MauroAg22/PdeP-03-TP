@@ -1,12 +1,15 @@
 import { PRIORIDAD, ESTADO } from "../lib/constantes";
 
 export class Tarea {
+    private id: number = 0;
     private titulo: string;
     private descripcion: string;
-    private prioridad: typeof PRIORIDAD[number];
-    private estado: typeof ESTADO[number];
+    private prioridad: typeof PRIORIDAD[0|1|2];
+    private estado: typeof ESTADO[0|1|2|3];
     private fechaCreacion: Date;
     private fechaVencimiento: Date;
+
+    // ----------------------------------------- Constructor -----------------------------------------
 
     constructor(titulo: string, descripcion: string, prioridad: typeof PRIORIDAD[number], estado: typeof ESTADO[number], fechaVencimiento: Date) {
         this.titulo = titulo;
@@ -20,6 +23,7 @@ export class Tarea {
 
     // ----------------------------------------- Setters -----------------------------------------
 
+    setId(id: number): void { this.id = id; }
     setTitulo(titulo: string): void { this.titulo = titulo; }
     setDescripcion(descripcion: string): void { this.descripcion = descripcion; }
     setPrioridad(prioridad: typeof PRIORIDAD[number]): void { this.prioridad = prioridad; }
@@ -29,6 +33,7 @@ export class Tarea {
 
     // ----------------------------------------- Getters -----------------------------------------
 
+    getId(): number { return this.id; }
     getTitulo(): string { return this.titulo; }
     getDescripcion(): string { return this.descripcion; }
     getPrioridad(): typeof PRIORIDAD[number] { return this.prioridad; }
@@ -36,8 +41,5 @@ export class Tarea {
     getFechaCreacion(): Date { return this.fechaCreacion; }
     getFechaVencimiento(): Date { return this.fechaVencimiento; }
 
-    // ----------------------------------------- Métodos -----------------------------------------
-
-    
 }
 
