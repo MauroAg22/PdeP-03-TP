@@ -36,5 +36,9 @@ export class Tarea {
     getEstado(): typeof ESTADO[number] { return this.estado; }
     getFechaCreacion(): Date { return this.fechaCreacion; }
     getFechaVencimiento(): Date { return this.fechaVencimiento; }
+
+    // ----------------------------------------- Métodos -----------------------------------------
+
+    
 }
 
