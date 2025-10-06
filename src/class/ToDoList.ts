@@ -11,6 +11,7 @@ export class ToDoList {
 
     getTareas(): Tarea[] { return this.tareas; }
     setTareas(tareas: Tarea[]): void { this.tareas = tareas; }
+    getUnaTarea(id: number): Tarea { return this.tareas[id]; }
 
     agregarTarea(tarea: Tarea): void {
         this.tareas[this.tareas.length] = tarea;
@@ -57,21 +58,5 @@ export class ToDoList {
         console.log(`Fecha de Creación: ${this.tareas[idTarea].getFechaCreacion().toLocaleDateString()}`);
         console.log(`Fecha de Vencimiento: ${this.tareas[idTarea].getFechaVencimiento().toLocaleDateString()}`);
         console.log('\n--------------------------------------------------------------------\n');
-    }
-
-
-    listarTareas(): void {
-        console.log('--------------------------------------------------------------------');
-        console.log('                         Lista de Tareas');
-        console.log('--------------------------------------------------------------------');
-        for (let tarea of this.tareas) {
-            console.log(`\nTítulo: ${tarea.getTitulo()}`);
-            console.log(`Descripción: ${tarea.getDescripcion()}`);
-            console.log(`Prioridad: ${tarea.getPrioridad()}`);
-            console.log(`Estado: ${tarea.getEstado()}`);
-            console.log(`Fecha de Creación: ${tarea.getFechaCreacion().toLocaleDateString()}`);
-            console.log(`Fecha de Vencimiento: ${tarea.getFechaVencimiento().toLocaleDateString()}`);
-            console.log('\n--------------------------------------------------------------------');
-        }
     }
 }
