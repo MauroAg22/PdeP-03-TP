@@ -71,7 +71,6 @@ async function main(): Promise<void> {
     // Fecha de hoy
     let hoy = new Date();
     hoy.setHours(0, 0, 0, 0);
-
     miToDoList.agregarTarea(tarea1);
     miToDoList.agregarTarea(tarea2);
     miToDoList.agregarTarea(tarea3);
@@ -261,7 +260,13 @@ async function main(): Promise<void> {
                                                             await input('Presione Enter para continuar...');
                                                             continue;
                                                         } else {
-                                                            esValidoElDato = true;
+                                                            if (parseInt(nuevoAnio) >= hoy.getFullYear()) {
+                                                                esValidoElDato = true;
+                                                            }
+                                                            else {
+                                                                console.log("\nEl año debe ser el actual o un año futuro. Intente nuevamente.\n");
+                                                                await input('Presione Enter para continuar...');
+                                                            }
                                                         }
                                                     } while (!esValidoElDato);
 
@@ -448,7 +453,25 @@ async function main(): Promise<void> {
                             await input('Presione Enter para continuar...');
                             continue;
                         } else {
-                            esValidoElDato = true;
+                            do {
+                                console.clear();
+                                console.log("Ingrese el año de vencimiento de la nueva tarea. Año (YYYY)\n");
+                                anioNuevaTarea = await input('> ');
+                                if (!comprobarFormatoAnio(anioNuevaTarea)) {
+                                    console.log("\nFormato no válido. Intente nuevamente.\n");
+                                    await input('Presione Enter para continuar...');
+                                    continue;
+                                } else {
+                                    if (parseInt(anioNuevaTarea) >= hoy.getFullYear()) {
+                                        esValidoElDato = true;
+                                    }
+                                    else {
+                                        console.log("\nEl año debe ser el actual o un año futuro. Intente nuevamente.\n");
+                                        await input('Presione Enter para continuar...');
+                                    }
+                                }
+                            } while (!esValidoElDato);
+
                         }
                     } while (!esValidoElDato);
 
