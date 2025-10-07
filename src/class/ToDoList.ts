@@ -1,6 +1,6 @@
 import { Tarea } from "./Tarea";
-import { PRIORIDAD, ESTADO } from "../lib/constantes";
-import { fechaToString, comprobarFormatoAnio, comprobarFormatoMes, comprobarFormatoDia } from "../lib/funciones";
+import { ESTADO } from "../lib/constantes";
+// import { fechaToString, comprobarFormatoAnio, comprobarFormatoMes, comprobarFormatoDia } from "../lib/funciones";
 
 export class ToDoList {
     private tareas: Tarea[];

@@ -1,7 +1,7 @@
 import { PRIORIDAD, ESTADO } from "./lib/constantes";
 import { Tarea } from "./class/Tarea";
 import { ToDoList } from "./class/ToDoList";
-import { fechaToString } from "./lib/funciones";
+import { esFechaValida, comprobarFormatoAnio, comprobarFormatoMes, comprobarFormatoDia, fechaToString } from "./lib/funciones";
 import { input, close } from "./lib/input";
 
 
@@ -10,9 +10,7 @@ function menuPrincipal(): void {
     console.log('-------- Menú de Opciones --------\n');
     console.log('[1] Mostrar tareas');
     console.log('[2] Agregar tarea');
-    console.log('[3] Modificar tarea');
-    console.log('[4] Eliminar tarea');
-    console.log('[5] Listar tareas\n');
+    console.log('[3] Buscar tarea');
     console.log('[0] Salir\n');
     console.log('----------------------------------\n');
     console.log('Ingrese una opción.\n');
@@ -81,6 +79,10 @@ async function main(): Promise<void> {
 
     let miToDoList = new ToDoList();
     let salirDelMenu: boolean = false;
+
+    // Fecha de hoy
+    let hoy = new Date();
+    hoy.setHours(0, 0, 0, 0);
 
     miToDoList.agregarTarea(tarea1);
     miToDoList.agregarTarea(tarea2);
@@ -294,33 +296,158 @@ async function main(): Promise<void> {
                 console.clear();
                 break;
             case 2:
-                // Agregar tarea
+                // Variables para nueva tarea
+                let tituloNuevaTarea: string;
+                let descripcionNuevaTarea: string;
+                let prioridadNuevaTarea: number;
+                let estadoNuevaTarea: number;
+                let anioNuevaTarea: string;
+                let mesNuevaTarea: string;
+                let diaNuevaTarea: string;
+
+                // Variable de control de bucle
+                let esValidoElDato: boolean = false;
+
+
+                do {
+                    console.clear();
+                    console.log("Ingrese el título de la nueva tarea.\n");
+                    tituloNuevaTarea = await input('> ');
+
+                    if (tituloNuevaTarea.trim() === "") {
+                        console.log("\nEl título no puede estar vacío. Intente nuevamente.\n");
+                        await input('Presione Enter para continuar...');
+                        console.clear();
+                    } else {
+                        esValidoElDato = true;
+                    }
+                } while (!esValidoElDato);
+
+                esValidoElDato = false;
+
+                do {
+                    console.clear();
+                    console.log("Ingrese la descripción de la nueva tarea.\n");
+                    descripcionNuevaTarea = await input('> ');
+
+                    if (descripcionNuevaTarea.trim() === "") {
+                        console.log("\nLa descripción no puede estar vacía. Intente nuevamente.\n");
+                        await input('Presione Enter para continuar...');
+                        console.clear();
+                    } else {
+                        esValidoElDato = true;
+                    }
+                } while (!esValidoElDato);
+
+                esValidoElDato = false;
+
+                do {
+                    console.clear();
+                    console.log("Ingrese la prioridad de la nueva tarea (1-3).\n");
+                    prioridadNuevaTarea = parseInt(await input('> '));
+                    if (prioridadNuevaTarea < 1 || prioridadNuevaTarea > 3 || isNaN(prioridadNuevaTarea)) {
+                        console.log("\nPrioridad no válida. Intente nuevamente.\n");
+                        await input('Presione Enter para continuar...');
+                    } else {
+                        esValidoElDato = true;
+                    }
+                } while (!esValidoElDato);
+
+                esValidoElDato = false;
+
+                do {
+                    console.clear();
+                    console.log("Ingrese el estado de la nueva tarea (1-4).\n");
+                    estadoNuevaTarea = parseInt(await input('> '));
+                    if (estadoNuevaTarea < 1 || estadoNuevaTarea > 4 || isNaN(estadoNuevaTarea)) {
+                        console.log("\nEstado no válido. Intente nuevamente.\n");
+                        await input('Presione Enter para continuar...');
+                    } else {
+                        esValidoElDato = true;
+                    }
+                } while (!esValidoElDato);
+
+                esValidoElDato = false;
+
+                do {
+
+                    do {
+                        console.clear();
+                        console.log("Ingrese el año de vencimiento de la nueva tarea. Año (YYYY)\n");
+                        anioNuevaTarea = await input('> ');
+                        if (!comprobarFormatoAnio(anioNuevaTarea)) {
+                            console.log("\nFormato no válido. Intente nuevamente.\n");
+                            await input('Presione Enter para continuar...');
+                            continue;
+                        } else {
+                            esValidoElDato = true;
+                        }
+                    } while (!esValidoElDato);
+
+                    esValidoElDato = false;
+
+                    do {
+                        console.clear();
+                        console.log("Ingrese el mes de vencimiento de la nueva tarea. Mes (MM)\n");
+                        mesNuevaTarea = await input('> ');
+                        if (!comprobarFormatoMes(mesNuevaTarea)) {
+                            console.log("\nFormato no válido. Intente nuevamente.\n");
+                            await input('Presione Enter para continuar...');
+                            continue;
+                        } else {
+                            esValidoElDato = true;
+                        }
+                    } while (!esValidoElDato);
+
+                    esValidoElDato = false;
+
+                    do {
+                        console.clear();
+                        console.log("Ingrese el día de vencimiento de la nueva tarea. Día (DD)\n");
+                        diaNuevaTarea = await input('> ');
+                        if (!comprobarFormatoDia(diaNuevaTarea)) {
+                            console.log("\nFormato no válido. Intente nuevamente.\n");
+                            await input('Presione Enter para continuar...');
+                            continue;
+                        } else {
+                            esValidoElDato = true;
+                        }
+                    } while (!esValidoElDato);
+
+                    esValidoElDato = false;
+
+                    if (!esFechaValida(parseInt(anioNuevaTarea), parseInt(mesNuevaTarea), parseInt(diaNuevaTarea))) {
+                        console.log("\nFecha no válida. Intente nuevamente.\n");
+                        await input('Presione Enter para continuar...');
+                        continue;
+                    } else {
+                        if (new Date(fechaToString(anioNuevaTarea, mesNuevaTarea, diaNuevaTarea)).getTime() <= hoy.getTime()) {
+                            console.log("\nLa fecha de vencimiento debe ser futura a la fecha actual. Intente nuevamente.\n");
+                            await input('Presione Enter para continuar...');
+                            continue;
+                        }
+                    }
+                    esValidoElDato = true;
+                } while (!esValidoElDato);
+
+                esValidoElDato = false;
+
+                let nuevaTarea = new Tarea(
+                    tituloNuevaTarea,
+                    descripcionNuevaTarea,
+                    PRIORIDAD[prioridadNuevaTarea - 1],
+                    ESTADO[estadoNuevaTarea - 1],
+                    new Date(fechaToString(anioNuevaTarea, mesNuevaTarea, diaNuevaTarea) + "T03:00:00Z") // UTC-3
+                );
+
+                miToDoList.agregarTarea(nuevaTarea);
+                console.log("\nTarea agregada con éxito.\n");
+                await input('Presione Enter para continuar...');
+
                 console.clear();
                 break;
             case 3:
-                // Modificar tarea
-                console.clear();
-                break;
-            case 4:
-
-                let salirDelCase: boolean = false;
-                let idTareaAEliminar: number = 6; // Aquí se debería obtener el ID del usuario, por ahora está fijo
-
-                do {
-                    if (miToDoList.comprobarSiSePuedeBorrarTarea(idTareaAEliminar)) {
-                        miToDoList.eliminarTarea(idTareaAEliminar);
-                        console.log("Tarea eliminada con éxito.");
-                        salirDelCase = true;
-                    } else {
-                        console.log("ID de tarea no válido. Intente nuevamente.");
-                        salirDelCase = true; // Se debe quitar cuando se implemente la entrada del usuario
-                    }
-                } while (!salirDelCase);
-                salirDelMenu = true; // Se debe quitar cuando se implemente la entrada del usuario y el menú vuelva a mostrarse
-                // console.clear();
-                break;
-            case 5:
-                // Listar tareas
+                // Buscar tarea
                 console.clear();
                 break;
             case 0:

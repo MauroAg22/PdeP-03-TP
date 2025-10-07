@@ -15,8 +15,20 @@ function comprobarFormatoDia(dia: string): boolean {
     return formatoValidoDia.test(dia.toString());
 }
 
-function fechaToString(anio:string, mes:string, dia:string): string {
+function fechaToString(anio: string, mes: string, dia: string): string {
     return `${anio}-${mes}-${dia}`;
+}
+
+function esFechaValida(anio: number, mes: number, dia: number): boolean {
+    let date = new Date(anio, mes - 1, dia);
+
+    if (date.getFullYear() == anio &&
+        (date.getMonth() + 1) == mes &&
+        date.getDate() == dia) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 // function comprobarFechaVencimiento(anio: string, mes: string, dia: string): boolean {
@@ -34,4 +46,4 @@ function fechaToString(anio:string, mes:string, dia:string): string {
 //     return fecha > hoy;
 // }
 
-export { comprobarFormatoAnio, comprobarFormatoMes, comprobarFormatoDia, fechaToString };
+export { esFechaValida, comprobarFormatoAnio, comprobarFormatoMes, comprobarFormatoDia, fechaToString };
