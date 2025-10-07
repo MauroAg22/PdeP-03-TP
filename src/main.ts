@@ -28,18 +28,6 @@ function tareasAVer(): void {
     console.log('Ingrese una opción.\n');
 }
 
-function menuModificar(): void {
-    console.log("------- ¿Qué desea modificar? ------\n");
-    console.log("[1] Título");
-    console.log("[2] Descripción");
-    console.log("[3] Prioridad");
-    console.log("[4] Estado");
-    console.log("[5] Fecha de vencimiento\n");
-    console.log("[0] Volver al menú principal");
-    console.log('----------------------------------\n');
-    console.log('Ingrese una opción.\n');
-}
-
 // Punto de entrada imperativo
 async function main(): Promise<void> {
 
@@ -256,8 +244,77 @@ async function main(): Promise<void> {
                                                 break;
                                             case 5:
                                                 // Editar fecha de vencimiento
-                                                console.clear();
-                                                await input('Esta opción aún no está disponible. Presione Enter para continuar...');
+
+                                                let esValidoElDato: boolean = false;
+                                                let nuevoAnio: string;
+                                                let nuevoMes: string;
+                                                let nuevoDia: string;
+
+                                                do {
+
+                                                    do {
+                                                        console.clear();
+                                                        console.log("Ingrese el año de vencimiento de la nueva tarea. Año (YYYY)\n");
+                                                        nuevoAnio = await input('> ');
+                                                        if (!comprobarFormatoAnio(nuevoAnio)) {
+                                                            console.log("\nFormato no válido. Intente nuevamente.\n");
+                                                            await input('Presione Enter para continuar...');
+                                                            continue;
+                                                        } else {
+                                                            esValidoElDato = true;
+                                                        }
+                                                    } while (!esValidoElDato);
+
+                                                    esValidoElDato = false;
+
+                                                    do {
+                                                        console.clear();
+                                                        console.log("Ingrese el mes de vencimiento de la nueva tarea. Mes (MM)\n");
+                                                        nuevoMes = await input('> ');
+                                                        if (!comprobarFormatoMes(nuevoMes)) {
+                                                            console.log("\nFormato no válido. Intente nuevamente.\n");
+                                                            await input('Presione Enter para continuar...');
+                                                            continue;
+                                                        } else {
+                                                            esValidoElDato = true;
+                                                        }
+                                                    } while (!esValidoElDato);
+
+                                                    esValidoElDato = false;
+
+                                                    do {
+                                                        console.clear();
+                                                        console.log("Ingrese el día de vencimiento de la nueva tarea. Día (DD)\n");
+                                                        nuevoDia = await input('> ');
+                                                        if (!comprobarFormatoDia(nuevoDia)) {
+                                                            console.log("\nFormato no válido. Intente nuevamente.\n");
+                                                            await input('Presione Enter para continuar...');
+                                                            continue;
+                                                        } else {
+                                                            esValidoElDato = true;
+                                                        }
+                                                    } while (!esValidoElDato);
+
+                                                    esValidoElDato = false;
+
+                                                    if (!esFechaValida(parseInt(nuevoAnio), parseInt(nuevoMes), parseInt(nuevoDia))) {
+                                                        console.log("\nFecha no válida. Intente nuevamente.\n");
+                                                        await input('Presione Enter para continuar...');
+                                                        continue;
+                                                    } else {
+                                                        if (new Date(fechaToString(nuevoAnio, nuevoMes, nuevoDia)).getTime() <= hoy.getTime()) {
+                                                            console.log("\nLa fecha de vencimiento debe ser futura a la fecha actual. Intente nuevamente.\n");
+                                                            await input('Presione Enter para continuar...');
+                                                            continue;
+                                                        } else {
+                                                            miToDoList.getUnaTarea(idTareaAVer).setFechaVencimiento(new Date(fechaToString(nuevoAnio, nuevoMes, nuevoDia) + "T03:00:00Z")); // UTC-3
+                                                            console.log("\nFecha de vencimiento editada con éxito.\n");
+                                                            await input('Presione Enter para continuar...');
+                                                        }
+                                                    }
+                                                    esValidoElDato = true;
+                                                } while (!esValidoElDato);
+
                                                 break;
                                             case 0:
                                                 // Volver al menú principal
@@ -343,7 +400,12 @@ async function main(): Promise<void> {
 
                 do {
                     console.clear();
-                    console.log("Ingrese la prioridad de la nueva tarea (1-3).\n");
+                    console.log("Ingrese la prioridad de la nueva tarea.\n");
+
+                    console.log(`[1] - ${PRIORIDAD[0]}`);
+                    console.log(`[2] - ${PRIORIDAD[1]}`);
+                    console.log(`[3] - ${PRIORIDAD[2]}\n`);
+
                     prioridadNuevaTarea = parseInt(await input('> '));
                     if (prioridadNuevaTarea < 1 || prioridadNuevaTarea > 3 || isNaN(prioridadNuevaTarea)) {
                         console.log("\nPrioridad no válida. Intente nuevamente.\n");
@@ -357,7 +419,13 @@ async function main(): Promise<void> {
 
                 do {
                     console.clear();
-                    console.log("Ingrese el estado de la nueva tarea (1-4).\n");
+                    console.log("Ingrese el estado de la nueva tarea.\n");
+
+                    console.log(`[1] - ${ESTADO[0]}`);
+                    console.log(`[2] - ${ESTADO[1]}`);
+                    console.log(`[3] - ${ESTADO[2]}`);
+                    console.log(`[4] - ${ESTADO[3]}\n`);
+
                     estadoNuevaTarea = parseInt(await input('> '));
                     if (estadoNuevaTarea < 1 || estadoNuevaTarea > 4 || isNaN(estadoNuevaTarea)) {
                         console.log("\nEstado no válido. Intente nuevamente.\n");
@@ -448,6 +516,44 @@ async function main(): Promise<void> {
                 break;
             case 3:
                 // Buscar tarea
+
+                let terminoBusqueda: string;
+                let tareasEncontradas: Tarea[] = [];
+                let indice: number = 0;
+
+
+                console.clear();
+                if (miToDoList.getTareas().length === 0) {
+                    console.log("No hay tareas cargadas.\n");
+                    await input('Presione Enter para continuar...');
+                    console.clear();
+                    break;
+                }
+
+                console.log("Por favor, ingrese el término de búsqueda.\n");
+                terminoBusqueda = (await input('> ')).toLowerCase();
+
+                for (const tarea of miToDoList.getTareas()) {
+                    if (tarea.getTitulo().toLowerCase().includes(terminoBusqueda) || tarea.getDescripcion().toLowerCase().includes(terminoBusqueda)) {
+                        tareasEncontradas[indice] = tarea;
+                        indice++;
+                    }
+                }
+
+                if (tareasEncontradas.length === 0) {
+                    console.log("\nNo se encontraron tareas que coincidan con el término de búsqueda.\n");
+                    await input('Presione Enter para continuar...');
+                    console.clear();
+                    break;
+                } else {
+                    console.clear();
+                    console.log("Las tareas encontradas son las siguientes:\n");
+                    for (let tarea of tareasEncontradas) {
+                        console.log(`[${tarea.getId()}] - ${tarea.getTitulo()}`);
+                    }
+                }
+                await input('\nPresione Enter para continuar...');
+
                 console.clear();
                 break;
             case 0:

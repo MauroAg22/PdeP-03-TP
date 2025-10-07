@@ -31,19 +31,4 @@ function esFechaValida(anio: number, mes: number, dia: number): boolean {
     }
 }
 
-// function comprobarFechaVencimiento(anio: string, mes: string, dia: string): boolean {
-
-
-//     if (!formatoValidoAnio.test(anio) || !formatoValidoMes.test(mes) || !formatoValidoDia.test(dia)) {
-//         return false;
-//     }
-
-//     const fecha = new Date(`${anio}-${mes}-${dia}`);
-//     const hoy = new Date();
-//     fecha.setHours(0, 0, 0, 0);
-//     hoy.setHours(0, 0, 0, 0);
-
-//     return fecha > hoy;
-// }
-
 export { esFechaValida, comprobarFormatoAnio, comprobarFormatoMes, comprobarFormatoDia, fechaToString };
