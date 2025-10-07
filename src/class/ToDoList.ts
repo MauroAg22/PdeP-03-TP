@@ -18,24 +18,6 @@ export class ToDoList {
         this.tareas[this.tareas.length - 1].setId(this.tareas.length - 1);
     }
 
-    comprobarSiSePuedeBorrarTarea(id: number): boolean {
-        return id >= 0 && id < this.tareas.length;
-    }
-
-    eliminarTarea(idTarea: number): void {
-
-        let arregloAuxiliar: Tarea[] = [];
-        let idAuxiliar: number = 0;
-
-        for (let i = 0; i < this.tareas.length; i++) {
-            if (this.tareas[i] !== this.tareas[idTarea]) {
-                arregloAuxiliar[idAuxiliar] = this.tareas[i];
-                idAuxiliar++;
-            }
-        }
-
-        this.tareas = arregloAuxiliar;
-    }
 
     arrayFiltrarPorEstado(idEstado: number): Tarea[] {
         let arregloAuxiliar: Tarea[] = [];
