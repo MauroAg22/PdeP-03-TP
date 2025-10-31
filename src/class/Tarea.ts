@@ -1,45 +1,50 @@
 import { PRIORIDAD, ESTADO } from "../lib/constantes";
+import { fechaToString } from "../lib/funciones";
 
 export class Tarea {
-    private id: number = 0;
-    private titulo: string;
-    private descripcion: string;
-    private prioridad: typeof PRIORIDAD[0|1|2];
-    private estado: typeof ESTADO[0|1|2|3];
-    private fechaCreacion: Date;
-    private fechaVencimiento: Date;
+    private _id: number = 0;
+    private _titulo: string;
+    private _descripcion: string;
+    private _prioridad: string;
+    private _estado: string;
+    private _fechaCreacion: Date;
+    private _fechaVencimiento: Date;
+    private _fechaUltimaEdicion: Date;
 
     // ----------------------------------------- Constructor -----------------------------------------
 
-    constructor(titulo: string, descripcion: string, prioridad: typeof PRIORIDAD[number], estado: typeof ESTADO[number], fechaVencimiento: Date) {
-        this.titulo = titulo;
-        this.descripcion = descripcion;
-        this.prioridad = prioridad;
-        this.estado = estado;
-        this.fechaCreacion = new Date();
-        this.fechaVencimiento = fechaVencimiento;
+    constructor(_titulo: string, _descripcion: string, _prioridad: typeof PRIORIDAD[number], _estado: typeof ESTADO[number], _fechaVencimiento: Date) {
+        let day: Date = new Date();
+        this._titulo = _titulo;
+        this._descripcion = _descripcion;
+        this._prioridad = _prioridad;
+        this._estado = _estado;
+        this._fechaCreacion = new Date(fechaToString(day.getFullYear().toString(), (day.getMonth() + 1).toString(), day.getDate().toString()) + "T03:00:00Z");
+        this._fechaVencimiento = _fechaVencimiento;
+        this._fechaUltimaEdicion = new Date(fechaToString(day.getFullYear().toString(), (day.getMonth() + 1).toString(), day.getDate().toString()) + "T03:00:00Z");
     }
 
 
     // ----------------------------------------- Setters -----------------------------------------
 
-    setId(id: number): void { this.id = id; }
-    setTitulo(titulo: string): void { this.titulo = titulo; }
-    setDescripcion(descripcion: string): void { this.descripcion = descripcion; }
-    setPrioridad(prioridad: typeof PRIORIDAD[number]): void { this.prioridad = prioridad; }
-    setEstado(estado: typeof ESTADO[number]): void { this.estado = estado; }
-    setFechaVencimiento(fechaVencimiento: Date): void { this.fechaVencimiento = fechaVencimiento; }
-
+    setId(id: number): void { this._id = id; }
+    setTitulo(titulo: string): void { this._titulo = titulo; }
+    setDescripcion(descripcion: string): void { this._descripcion = descripcion; }
+    setPrioridad(prioridad: typeof PRIORIDAD[number]): void { this._prioridad = prioridad; }
+    setEstado(estado: typeof ESTADO[number]): void { this._estado = estado; }
+    setFechaVencimiento(fechaVencimiento: Date): void { this._fechaVencimiento = fechaVencimiento; }
+    setFechaUltimaEdicion(fechaUltimaEdicion: Date): void { this._fechaUltimaEdicion = fechaUltimaEdicion }
 
     // ----------------------------------------- Getters -----------------------------------------
 
-    getId(): number { return this.id; }
-    getTitulo(): string { return this.titulo; }
-    getDescripcion(): string { return this.descripcion; }
-    getPrioridad(): typeof PRIORIDAD[number] { return this.prioridad; }
-    getEstado(): typeof ESTADO[number] { return this.estado; }
-    getFechaCreacion(): Date { return this.fechaCreacion; }
-    getFechaVencimiento(): Date { return this.fechaVencimiento; }
+    getId(): number { return this._id; }
+    getTitulo(): string { return this._titulo; }
+    getDescripcion(): string { return this._descripcion; }
+    getPrioridad(): typeof PRIORIDAD[number] { return this._prioridad; }
+    getEstado(): typeof ESTADO[number] { return this._estado; }
+    getFechaCreacion(): Date { return this._fechaCreacion; }
+    getFechaVencimiento(): Date { return this._fechaVencimiento; }
+    getFechaUltimaEdicion(): Date { return this._fechaUltimaEdicion; }
 
 }
 
