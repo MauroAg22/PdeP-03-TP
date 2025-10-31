@@ -103,13 +103,13 @@ async function main(): Promise<void> {
                 let nuevaDescripcion: string;
                 let nuevaPrioridad: number;
                 let nuevoEstado: number;
-                let nuevoAnio: string;
-                let nuevoMes: string;
-                let nuevoDia: string;
+                // let nuevoAnio: string;
+                // let nuevoMes: string;
+                // let nuevoDia: string;
 
                 if (miToDoList.getTareas().length === 0) {
                     console.log("No hay tareas cargadas.\n");
-                    await input('Presione Enter para continuar...');
+                    await input('Presione "Enter" para continuar...');
                     console.clear();
                     break;
                 }
@@ -117,11 +117,14 @@ async function main(): Promise<void> {
                 do {
                     tareasAVer();
                     opcionTareasAVer = parseInt(await input('> '), 10);
-                    if (opcionTareasAVer >= 0 && opcionTareasAVer <= 5) {
+
+                    if (opcionTareasAVer === 0) {
                         console.clear();
-                        if (opcionTareasAVer !== 0) {
-                            arregloTareasFiltradas = miToDoList.arrayFiltrarPorEstado(opcionTareasAVer - 2);
-                        }
+                        break;
+                    }
+
+                    if (opcionTareasAVer > 0 && opcionTareasAVer <= 5) {
+                        console.clear();
                         do {
                             if (opcionTareasAVer - 1 === 0) {
                                 console.log('--------------- Tus tareas son las siguientes ----------------------\n');
@@ -131,20 +134,21 @@ async function main(): Promise<void> {
                                 }
                                 console.log('\n--------------------------------------------------------------------\n');
                             } else {
+                                arregloTareasFiltradas = miToDoList.arrayFiltrarPorEstado(opcionTareasAVer - 2);
 
                                 if (arregloTareasFiltradas.length === 0) {
                                     console.log("No hay tareas con ese estado.\n");
-                                    await input('Presione Enter para continuar...');
+                                    await input('Presione "Enter" para continuar...');
                                     console.clear();
                                     break;
                                 }
 
-                                console.log('---------- Tus tareas pendientes son las siguientes ----------------\n');
+                                console.log(`---------- Tus tareas en estado "${ESTADO[opcionTareasAVer - 2].toUpperCase()}" son las siguientes ----------------\n`);
                                 for (let tarea of arregloTareasFiltradas) {
                                     console.log(`[${tarea.getId()}] - ${tarea.getTitulo()}`);
                                     idVerMasDetalles[idVerMasDetalles.length] = tarea.getId();
                                 }
-                                console.log('\n--------------------------------------------------------------------\n');
+                                console.log('\n-----------------------------------------------------------------------------------\n');
                             }
                             console.log('Ingrese el ID de la tarea que desea ver en detalle.\n\n');
                             idTareaAVer = parseInt(await input('> '), 10);
@@ -167,6 +171,17 @@ async function main(): Promise<void> {
 
                                 if (opcionQuiereEditar === 1) {
                                     quiereEditar = true;
+                                } else if (opcionQuiereEditar === 2) {
+                                    quiereEditar = false;
+                                    console.log("No se editará la tarea.\n");
+                                    await input('Presione "Enter" para volver al menú principal...');
+                                    console.clear();
+                                    break;
+                                } else {
+                                    console.log("\nOpción no válida. No se editará la tarea.\n");
+                                    await input('Presione "Enter" para volver al menú principal...');
+                                    console.clear();
+                                    break;
                                 }
 
                                 if (quiereEditar) {
@@ -195,7 +210,7 @@ async function main(): Promise<void> {
                                                 miToDoList.getUnaTarea(idTareaAVer).setTitulo(nuevoTitulo);
                                                 miToDoList.getUnaTarea(idTareaAVer).setFechaUltimaEdicion(new Date(fechaToString(day.getFullYear().toString(), (day.getMonth() + 1).toString(), day.getDate().toString()) + "T03:00:00Z"));
                                                 console.log("\nTítulo editado con éxito.\n");
-                                                await input('Presione Enter para continuar...');
+                                                await input('Presione "Enter" para continuar...');
                                                 break;
                                             case 2:
                                                 // Editar descripción
@@ -203,7 +218,7 @@ async function main(): Promise<void> {
                                                 miToDoList.getUnaTarea(idTareaAVer).setDescripcion(nuevaDescripcion);
                                                 miToDoList.getUnaTarea(idTareaAVer).setFechaUltimaEdicion(new Date(fechaToString(day.getFullYear().toString(), (day.getMonth() + 1).toString(), day.getDate().toString()) + "T03:00:00Z"));
                                                 console.log("\nDescripción editada con éxito.\n");
-                                                await input('Presione Enter para continuar...');
+                                                await input('Presione "Enter" para continuar...');
                                                 break;
                                             case 3:
                                                 // Editar prioridad
@@ -219,10 +234,10 @@ async function main(): Promise<void> {
                                                         miToDoList.getUnaTarea(idTareaAVer).setPrioridad(PRIORIDAD[nuevaPrioridad - 1]);
                                                         miToDoList.getUnaTarea(idTareaAVer).setFechaUltimaEdicion(new Date(fechaToString(day.getFullYear().toString(), (day.getMonth() + 1).toString(), day.getDate().toString()) + "T03:00:00Z"));
                                                         console.log("\nPrioridad editada con éxito.\n");
-                                                        await input('Presione Enter para continuar...');
+                                                        await input('Presione "Enter" para continuar...');
                                                     } else {
                                                         console.log("\nPrioridad no válida. Por favor, seleccione una prioridad válida.\n");
-                                                        await input('Presione Enter para continuar...');
+                                                        await input('Presione "Enter" para continuar...');
                                                     }
                                                 } while (nuevaPrioridad < 1 || nuevaPrioridad > 3);
                                                 break;
@@ -240,10 +255,10 @@ async function main(): Promise<void> {
                                                         miToDoList.getUnaTarea(idTareaAVer).setEstado(ESTADO[nuevoEstado - 1]);
                                                         miToDoList.getUnaTarea(idTareaAVer).setFechaUltimaEdicion(new Date(fechaToString(day.getDay().toString(), (day.getMonth() + 1).toString(), day.getFullYear().toString()) + "T03:00:00Z"));
                                                         console.log("\nEstado editado con éxito.\n");
-                                                        await input('Presione Enter para continuar...');
+                                                        await input('Presione "Enter" para continuar...');
                                                     } else {
                                                         console.log("\nEstado no válido. Por favor, seleccione un estado válido.\n");
-                                                        await input('Presione Enter para continuar...');
+                                                        await input('Presione "Enter" para continuar...');
                                                     }
                                                 } while (nuevoEstado < 1 || nuevoEstado > 4);
                                                 break;
@@ -263,7 +278,7 @@ async function main(): Promise<void> {
                                                         nuevoAnio = await input('> ');
                                                         if (!comprobarFormatoAnio(nuevoAnio)) {
                                                             console.log("\nFormato no válido. Intente nuevamente.\n");
-                                                            await input('Presione Enter para continuar...');
+                                                            await input('Presione "Enter" para continuar...');
                                                             continue;
                                                         } else {
                                                             if (parseInt(nuevoAnio) >= hoy.getFullYear()) {
@@ -271,7 +286,7 @@ async function main(): Promise<void> {
                                                             }
                                                             else {
                                                                 console.log("\nEl año debe ser el actual o un año futuro. Intente nuevamente.\n");
-                                                                await input('Presione Enter para continuar...');
+                                                                await input('Presione "Enter" para continuar...');
                                                             }
                                                         }
                                                     } while (!esValidoElDato);
@@ -284,7 +299,7 @@ async function main(): Promise<void> {
                                                         nuevoMes = await input('> ');
                                                         if (!comprobarFormatoMes(nuevoMes)) {
                                                             console.log("\nFormato no válido. Intente nuevamente.\n");
-                                                            await input('Presione Enter para continuar...');
+                                                            await input('Presione "Enter" para continuar...');
                                                             continue;
                                                         } else {
                                                             esValidoElDato = true;
@@ -299,7 +314,7 @@ async function main(): Promise<void> {
                                                         nuevoDia = await input('> ');
                                                         if (!comprobarFormatoDia(nuevoDia)) {
                                                             console.log("\nFormato no válido. Intente nuevamente.\n");
-                                                            await input('Presione Enter para continuar...');
+                                                            await input('Presione "Enter" para continuar...');
                                                             continue;
                                                         } else {
                                                             esValidoElDato = true;
@@ -310,17 +325,17 @@ async function main(): Promise<void> {
 
                                                     if (!esFechaValida(parseInt(nuevoAnio), parseInt(nuevoMes), parseInt(nuevoDia))) {
                                                         console.log("\nFecha no válida. Intente nuevamente.\n");
-                                                        await input('Presione Enter para continuar...');
+                                                        await input('Presione "Enter" para continuar...');
                                                         continue;
                                                     } else {
                                                         if (new Date(fechaToString(nuevoAnio, nuevoMes, nuevoDia)).getTime() <= hoy.getTime()) {
                                                             console.log("\nLa fecha de vencimiento debe ser futura a la fecha actual. Intente nuevamente.\n");
-                                                            await input('Presione Enter para continuar...');
+                                                            await input('Presione "Enter" para continuar...');
                                                             continue;
                                                         } else {
                                                             miToDoList.getUnaTarea(idTareaAVer).setFechaVencimiento(new Date(fechaToString(nuevoAnio, nuevoMes, nuevoDia) + "T03:00:00Z")); // UTC-3
                                                             console.log("\nFecha de vencimiento editada con éxito.\n");
-                                                            await input('Presione Enter para continuar...');
+                                                            await input('Presione "Enter" para continuar...');
                                                         }
                                                     }
                                                     esValidoElDato = true;
@@ -335,7 +350,7 @@ async function main(): Promise<void> {
                                             default:
                                                 // Opción no válida
                                                 console.log("\nOpción no válida\n");
-                                                await input('Presione Enter para continuar...');
+                                                await input('Presione "Enter" para continuar...');
                                                 break;
                                         }
 
@@ -348,7 +363,7 @@ async function main(): Promise<void> {
 
                             } else {
                                 console.log("\nID de tarea no válido. Intente nuevamente.\n");
-                                await input('Presione Enter para continuar...');
+                                await input('Presione "Enter" para continuar...');
                                 console.clear();
                             }
                         } while (!sePuedeVerLaTarea);
@@ -358,7 +373,7 @@ async function main(): Promise<void> {
                         break;
                     } else {
                         console.log("\nOpción no válida. Intente nuevamente.\n");
-                        await input('Presione Enter para continuar...');
+                        await input('Presione "Enter" para continuar...');
                     }
                 } while (opcionTareasAVer < 0 || opcionTareasAVer > 5);
                 console.clear();
@@ -384,7 +399,7 @@ async function main(): Promise<void> {
 
                     if (tituloNuevaTarea.trim() === "") {
                         console.log("\nEl título no puede estar vacío. Intente nuevamente.\n");
-                        await input('Presione Enter para continuar...');
+                        await input('Presione "Enter" para continuar...');
                         console.clear();
                     } else {
                         esValidoElDato = true;
@@ -400,7 +415,7 @@ async function main(): Promise<void> {
 
                     if (descripcionNuevaTarea.trim() === "") {
                         console.log("\nLa descripción no puede estar vacía. Intente nuevamente.\n");
-                        await input('Presione Enter para continuar...');
+                        await input('Presione "Enter" para continuar...');
                         console.clear();
                     } else {
                         esValidoElDato = true;
@@ -420,7 +435,7 @@ async function main(): Promise<void> {
                     prioridadNuevaTarea = parseInt(await input('> '));
                     if (prioridadNuevaTarea < 1 || prioridadNuevaTarea > 3 || isNaN(prioridadNuevaTarea)) {
                         console.log("\nPrioridad no válida. Intente nuevamente.\n");
-                        await input('Presione Enter para continuar...');
+                        await input('Presione "Enter" para continuar...');
                     } else {
                         esValidoElDato = true;
                     }
@@ -440,7 +455,7 @@ async function main(): Promise<void> {
                     estadoNuevaTarea = parseInt(await input('> '));
                     if (estadoNuevaTarea < 1 || estadoNuevaTarea > 4 || isNaN(estadoNuevaTarea)) {
                         console.log("\nEstado no válido. Intente nuevamente.\n");
-                        await input('Presione Enter para continuar...');
+                        await input('Presione "Enter" para continuar...');
                     } else {
                         esValidoElDato = true;
                     }
@@ -456,7 +471,7 @@ async function main(): Promise<void> {
                         anioNuevaTarea = await input('> ');
                         if (!comprobarFormatoAnio(anioNuevaTarea)) {
                             console.log("\nFormato no válido. Intente nuevamente.\n");
-                            await input('Presione Enter para continuar...');
+                            await input('Presione "Enter" para continuar...');
                             continue;
                         } else {
                             do {
@@ -465,7 +480,7 @@ async function main(): Promise<void> {
                                 anioNuevaTarea = await input('> ');
                                 if (!comprobarFormatoAnio(anioNuevaTarea)) {
                                     console.log("\nFormato no válido. Intente nuevamente.\n");
-                                    await input('Presione Enter para continuar...');
+                                    await input('Presione "Enter" para continuar...');
                                     continue;
                                 } else {
                                     if (parseInt(anioNuevaTarea) >= hoy.getFullYear()) {
@@ -473,7 +488,7 @@ async function main(): Promise<void> {
                                     }
                                     else {
                                         console.log("\nEl año debe ser el actual o un año futuro. Intente nuevamente.\n");
-                                        await input('Presione Enter para continuar...');
+                                        await input('Presione "Enter" para continuar...');
                                     }
                                 }
                             } while (!esValidoElDato);
@@ -489,7 +504,7 @@ async function main(): Promise<void> {
                         mesNuevaTarea = await input('> ');
                         if (!comprobarFormatoMes(mesNuevaTarea)) {
                             console.log("\nFormato no válido. Intente nuevamente.\n");
-                            await input('Presione Enter para continuar...');
+                            await input('Presione "Enter" para continuar...');
                             continue;
                         } else {
                             esValidoElDato = true;
@@ -504,7 +519,7 @@ async function main(): Promise<void> {
                         diaNuevaTarea = await input('> ');
                         if (!comprobarFormatoDia(diaNuevaTarea)) {
                             console.log("\nFormato no válido. Intente nuevamente.\n");
-                            await input('Presione Enter para continuar...');
+                            await input('Presione "Enter" para continuar...');
                             continue;
                         } else {
                             esValidoElDato = true;
@@ -515,12 +530,12 @@ async function main(): Promise<void> {
 
                     if (!esFechaValida(parseInt(anioNuevaTarea), parseInt(mesNuevaTarea), parseInt(diaNuevaTarea))) {
                         console.log("\nFecha no válida. Intente nuevamente.\n");
-                        await input('Presione Enter para continuar...');
+                        await input('Presione "Enter" para continuar...');
                         continue;
                     } else {
                         if (new Date(fechaToString(anioNuevaTarea, mesNuevaTarea, diaNuevaTarea)).getTime() <= hoy.getTime()) {
                             console.log("\nLa fecha de vencimiento debe ser futura a la fecha actual. Intente nuevamente.\n");
-                            await input('Presione Enter para continuar...');
+                            await input('Presione "Enter" para continuar...');
                             continue;
                         }
                     }
@@ -539,7 +554,7 @@ async function main(): Promise<void> {
 
                 miToDoList.agregarTarea(nuevaTarea);
                 console.log("\nTarea agregada con éxito.\n");
-                await input('Presione Enter para continuar...');
+                await input('Presione "Enter" para continuar...');
 
                 console.clear();
                 break;
@@ -554,7 +569,7 @@ async function main(): Promise<void> {
                 console.clear();
                 if (miToDoList.getTareas().length === 0) {
                     console.log("No hay tareas cargadas.\n");
-                    await input('Presione Enter para continuar...');
+                    await input('Presione "Enter" para continuar...');
                     console.clear();
                     break;
                 }
@@ -571,7 +586,7 @@ async function main(): Promise<void> {
 
                 if (tareasEncontradas.length === 0) {
                     console.log("\nNo se encontraron tareas que coincidan con el término de búsqueda.\n");
-                    await input('Presione Enter para continuar...');
+                    await input('Presione "Enter" para continuar...');
                     console.clear();
                     break;
                 } else {
@@ -581,7 +596,7 @@ async function main(): Promise<void> {
                         console.log(`[${tarea.getId()}] - ${tarea.getTitulo()}`);
                     }
                 }
-                await input('\nPresione Enter para continuar...');
+                await input('\nPresione "Enter" para continuar...');
 
                 console.clear();
                 break;
