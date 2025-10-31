@@ -186,11 +186,14 @@ async function main(): Promise<void> {
                                         console.log("Ingrese el número del campo que desea editar.\n");
                                         opcionCampoAEditar = parseInt(await input('> '), 10);
 
+                                        let day = new Date();
+
                                         switch (opcionCampoAEditar) {
                                             case 1:
                                                 // Editar título
                                                 nuevoTitulo = await input('Ingrese el nuevo título: ');
                                                 miToDoList.getUnaTarea(idTareaAVer).setTitulo(nuevoTitulo);
+                                                miToDoList.getUnaTarea(idTareaAVer).setFechaUltimaEdicion(new Date(fechaToString(day.getFullYear().toString(), (day.getMonth() + 1).toString(), day.getDate().toString()) + "T03:00:00Z"));
                                                 console.log("\nTítulo editado con éxito.\n");
                                                 await input('Presione Enter para continuar...');
                                                 break;
@@ -198,6 +201,7 @@ async function main(): Promise<void> {
                                                 // Editar descripción
                                                 nuevaDescripcion = await input('Ingrese la nueva descripción: ');
                                                 miToDoList.getUnaTarea(idTareaAVer).setDescripcion(nuevaDescripcion);
+                                                miToDoList.getUnaTarea(idTareaAVer).setFechaUltimaEdicion(new Date(fechaToString(day.getFullYear().toString(), (day.getMonth() + 1).toString(), day.getDate().toString()) + "T03:00:00Z"));
                                                 console.log("\nDescripción editada con éxito.\n");
                                                 await input('Presione Enter para continuar...');
                                                 break;
@@ -213,6 +217,7 @@ async function main(): Promise<void> {
 
                                                     if (nuevaPrioridad >= 1 && nuevaPrioridad <= 3) {
                                                         miToDoList.getUnaTarea(idTareaAVer).setPrioridad(PRIORIDAD[nuevaPrioridad - 1]);
+                                                        miToDoList.getUnaTarea(idTareaAVer).setFechaUltimaEdicion(new Date(fechaToString(day.getFullYear().toString(), (day.getMonth() + 1).toString(), day.getDate().toString()) + "T03:00:00Z"));
                                                         console.log("\nPrioridad editada con éxito.\n");
                                                         await input('Presione Enter para continuar...');
                                                     } else {
@@ -233,6 +238,7 @@ async function main(): Promise<void> {
                                                     nuevoEstado = parseInt(await input('> '), 10);
                                                     if (nuevoEstado >= 1 && nuevoEstado <= 4) {
                                                         miToDoList.getUnaTarea(idTareaAVer).setEstado(ESTADO[nuevoEstado - 1]);
+                                                        miToDoList.getUnaTarea(idTareaAVer).setFechaUltimaEdicion(new Date(fechaToString(day.getDay().toString(), (day.getMonth() + 1).toString(), day.getFullYear().toString()) + "T03:00:00Z"));
                                                         console.log("\nEstado editado con éxito.\n");
                                                         await input('Presione Enter para continuar...');
                                                     } else {
