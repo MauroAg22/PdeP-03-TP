@@ -16,7 +16,7 @@ function comprobarFormatoDia(dia: string): boolean {
 }
 
 function fechaToString(anio: string, mes: string, dia: string): string {
-    return `${anio}-${mes}-${dia}`;
+    return `${anio}-${mes.padStart(2, '0')}-${dia.padStart(2, '0')}`;
 }
 
 function esFechaValida(anio: number, mes: number, dia: number): boolean {
